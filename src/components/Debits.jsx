@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-
+import AccountBalance from './AccountBalance';
 class Debits extends Component{
     constructor(props) {
         super(props);
@@ -52,7 +52,7 @@ class Debits extends Component{
         }
         console.log(newDebit);
         let CopyPastDebts =[...this.state.PastDebts,newDebit];
-
+        this.props.handler(this.state.newAmount);
         this.setState({PastDebts: CopyPastDebts})
         try{
             const response = await fetch('https://moj-api.herokuapp.com/debits', {
@@ -100,13 +100,12 @@ class Debits extends Component{
                     <input type="text" onChange={(event)=>this.onChange("newDescription",event)} value={newDescription}/> 
                     <label>Amount: </label>
                     <input type="text" onChange={(event)=>this.onChange("newAmount",event)} value={newAmount}/>
-                    <input type="submit" value="Add Debit"/>
+                    <input type="submit" value="Add Debit" />
                         
                 </form>
-        
-              
+                <br/>
 
-                Balance: {this.props.accountBalance}
+                <AccountBalance accountBalance={this.props.accountBalance}/>
                 <br/>
                 <Link to="/">Home</Link>
                 <br/>
