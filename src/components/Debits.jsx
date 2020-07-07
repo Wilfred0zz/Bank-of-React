@@ -6,8 +6,7 @@ class Debits extends Component{
         super(props);
         this.state = {
           PastDebts:[],
-          newDescription:'',
-          newDate:'',
+          newDescription:"",
           newAmount:0,
         };
       }
@@ -33,28 +32,28 @@ class Debits extends Component{
         this.fetchDebits();
     }
 
-    onChange= (event) =>{//sets the Zip state to that of the one user entered
-        this.setState({newDescription : event.target.value});
-        console.log(this.state.newDescription)
-        this.setState({newAmount: event.target.value})
-        console.log(this.state.newAmount)
+    onChange= (string,event) =>{//sets the Zip state to that of the one user entered
+        this.setState({[string]:event.target.value});
     }
 
-    onSubmit=() =>{
+    onSubmit=(event) =>{
+        event.preventDefault();
         if(this.state.newDescription===""||this.state.newAmount === ""){
             alert("please make sure you filled out both options before submitting")
         }
-        this.setState({newDate: new Date(Date.now()).toLocaleDateString()});
-        console.log(this.state.newDate)
         this.AddDebit();
     }
 
-    AddDebit = async() =>{
+    AddDebit = async(event) =>{
         const newDebit = {
             "description" : this.state.newDescription,
             "amount" : this.state.newAmount,
-            "date" : this.state.newDate,
+            "date" : new Date(Date.now()).toLocaleDateString(),
         }
+        console.log(newDebit);
+        let CopyPastDebts =[...this.state.PastDebts,newDebit];
+
+        this.setState({PastDebts: CopyPastDebts})
         try{
             const response = await fetch('https://moj-api.herokuapp.com/debits', {
                 headers:{
@@ -74,7 +73,6 @@ class Debits extends Component{
               }
 
         }catch (error) {
-            alert("there is an error");
             console.log(error);
           } 
     }
@@ -85,7 +83,7 @@ class Debits extends Component{
         const {newAmount}= this.state.newAmount;
         return (
             <div>
-                <header><h1></h1>Debits</header>
+                <header><h1>Debits</h1></header>
                 <div className="AllDebits">
                     <ul>
                         {this.state.PastDebts.map((info) => (
@@ -99,9 +97,9 @@ class Debits extends Component{
                 </div>
                 <form onSubmit={this.onSubmit}>
                     <label>Description: </label>
-                    <input type="text" onChange={this.onChange} value={newDescription}/> 
+                    <input type="text" onChange={(event)=>this.onChange("newDescription",event)} value={newDescription}/> 
                     <label>Amount: </label>
-                    <input type="text" onChange={this.onChange} value={newAmount}/>
+                    <input type="text" onChange={(event)=>this.onChange("newAmount",event)} value={newAmount}/>
                     <input type="submit" value="Add Debit"/>
                         
                 </form>
