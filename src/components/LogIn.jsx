@@ -34,7 +34,22 @@ class LogIn extends Component {
     }
 
     return (
-      <div>
+      <div className="main-content">
+        <h1 className="heading">Log In</h1>
+        <Link className="user-nav" to="/">
+          Home
+        </Link>
+        <Link className="user-nav" to="/Debits">
+          Debits
+        </Link>
+        <Link className="user-nav" to="/userProfile">
+          User Profile
+        </Link>
+
+        <br />
+        <Link className="user-nav" to="/Credits">
+          Credits
+        </Link>
         <Link className="user-login" to="/">
           Home
         </Link>
